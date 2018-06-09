@@ -48,6 +48,10 @@ class DysonPureLink(object):
         return self.config['DYSON_PORT']
 
     @property
+    def temperature_unit(self):
+        return self.config['TEMPERATURE_UNIT']
+
+    @property
     def device_command(self):
         return '{0}/{1}/command'.format(self.device_type, self.serial_number)
 
@@ -75,8 +79,8 @@ class DysonPureLink(object):
 
         userdata.disconnected.put_nowait(True)
 
-    @staticmethod
-    def on_message(client, userdata, message):
+    # @staticmethod
+    def on_message(self, client, userdata, message):
         """Static callback to handle incoming messages"""
         payload = message.payload.decode("utf-8")
         json_message = json.loads(payload)
@@ -85,7 +89,7 @@ class DysonPureLink(object):
             userdata.state_data_available.put_nowait(StateData(json_message))
 
         if SensorsData.is_sensors_data(json_message):
-            userdata.sensor_data_available.put_nowait(SensorsData(json_message))
+            userdata.sensor_data_available.put_nowait(SensorsData(json_message, self.temperature_unit))
 
     def _request_state(self):
         """Publishes request for current state message"""

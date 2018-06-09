@@ -50,21 +50,26 @@ class DisconnectionError(Exception):
 class SensorsData(object):
     """Value type for sensors data"""
 
-    def __init__(self, message):
+    def __init__(self, message, temperature_unit):
         data = message['data']
         humidity = data['hact']
         temperature = data['tact']
         volatile_compounds = data['vact']
+        self.temperature_unit = temperature_unit
 
         self.humidity = None if humidity == 'OFF' else int(humidity)
-        self.temperature = None if temperature == 'OFF' else self.kelvin_to_fahrenheit(float(temperature) / 10)
+        if temperature == 'OFF':
+            self.temperature = None
+        else:
+            conversion_function = self.kelvin_to_fahrenheit if temperature_unit == 'F' else self.kelvin_to_celsius
+            self.temperature = conversion_function(float(temperature) / 10)
         self.volatile_compounds = 0 if volatile_compounds == 'INIT' else int(volatile_compounds)
         self.particles = int(data['pact'])
 
     def __repr__(self):
         """Return a String representation"""
-        return 'Temperature: {0} F, Humidity: {1} %, Volatile Compounds: {2}, Particles: {3}'.format(
-            self.temperature, self.humidity, self.volatile_compounds, self.particles)
+        return 'Temperature: {}°{}, Humidity: {} %, Volatile Compounds: {}, Particles: {}'.format(
+            self.temperature, self.temperature_unit, self.humidity, self.volatile_compounds, self.particles)
 
     @property
     def has_data(self):
@@ -75,8 +80,13 @@ class SensorsData(object):
         return message['msg'] in ['ENVIRONMENTAL-CURRENT-SENSOR-DATA']
 
     @staticmethod
-    def kelvin_to_fahrenheit (kelvin_value):
+    def kelvin_to_fahrenheit(kelvin_value):
         return kelvin_value * 9 / 5 - 459.67
+
+    @staticmethod
+    def kelvin_to_celsius(kelvin_value):
+        return kelvin_value - 273.15
+
 
 class StateData(object):
     """Value type for state data"""
