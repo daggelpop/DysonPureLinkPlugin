@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Value types, enums and mappings package"""
 
 # Map for connection return code and its meaning

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Dyson Pure Link Device Logic"""
 
 import base64, json, hashlib, os, time, yaml
