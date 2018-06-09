@@ -47,3 +47,4 @@ Temporary Items
 .apdisk
 dyson_pure_link.yaml
 *.pyc
+.idea
