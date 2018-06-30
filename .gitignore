@@ -48,3 +48,7 @@ Temporary Items
 dyson_pure_link.yaml
 *.pyc
 .idea
+*.egg
+*.EGG
+*.egg-info
+*.EGG-INFO
