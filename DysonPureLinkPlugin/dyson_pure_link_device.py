@@ -23,6 +23,13 @@ class DysonPureLink(object):
         self.state_data = None
         self._is_connected = None
 
+    def __enter__(self):
+        self.parse_config()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.disconnect_device()
+
     @property
     def has_valid_data(self):
         return self.sensor_data and self.sensor_data.has_data
