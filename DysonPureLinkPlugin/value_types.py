@@ -68,8 +68,14 @@ class SensorsData(object):
 
     def __repr__(self):
         """Return a String representation"""
-        return 'Temperature: {}°{}, Humidity: {} %, Volatile Compounds: {}, Particles: {}'.format(
-            self.temperature, self.temperature_unit, self.humidity, self.volatile_compounds, self.particles)
+        return 'Temperature: {:.1f}°{}, Humidity: {} %, Humidex: {:.1f}, Volatile Compounds: {}, Particles: {}'.format(
+            self.temperature,
+            self.temperature_unit,
+            self.humidity,
+            self.humidex,
+            self.volatile_compounds,
+            self.particles
+        )
 
     @property
     def has_data(self):
@@ -86,6 +92,15 @@ class SensorsData(object):
     @staticmethod
     def kelvin_to_celsius(kelvin_value):
         return kelvin_value - 273.15
+
+    @property
+    def humidex(self):
+        return self.temperature + 0.5555 * \
+                         (
+                             6.112 * 10.0 ** (7.5 * (self.temperature / (237.7 + self.temperature)))
+                             * (self.humidity / 100.0)
+                             - 10
+                         )
 
 
 class StateData(object):

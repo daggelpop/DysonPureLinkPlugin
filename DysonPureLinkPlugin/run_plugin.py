@@ -7,7 +7,8 @@ import argparse
 from dyson_pure_link_device import DysonPureLink
 from value_types import FanMode, StandbyMonitoring
 
-if __name__ == '__main__':
+
+def main():
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument('-fan')
     args_parser.add_argument('-standby')
@@ -42,3 +43,6 @@ if __name__ == '__main__':
 
     # Disconnect device (IMPORTANT) and print result
     print('Disconnected: ', dyson_pure_link.disconnect_device())
+
+if __name__ == '__main__':
+    main()
