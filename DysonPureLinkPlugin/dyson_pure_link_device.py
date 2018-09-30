@@ -167,10 +167,40 @@ class DysonPureLink(object):
         self.client = None
         return False
 
-    def set_fan_mode(self, mode):
-        """Changes fan mode: ON|OFF|AUTO"""
+    def set_fan_mode(self, mode, speed=0):
+        """
+        Changes fan mode: FAN|OFF|AUTO
+        Change fan speed: 1 - 10
+        """
+        data = {'fmod': mode}
+        if 1 <= speed <= 10:
+            data['fnsp'] = '{:04d}'.format(speed)
+
         if self._is_connected:
-            self._change_state({'fmod': mode})
+            self._change_state(data)
+
+    def set_heating_mode(self, mode, max_temperature=None):
+        """
+        Changes heating mode: HEAT|OFF
+        Change max temperature: 274K - 310K, 1C - 37C, ??F - ??F
+        """
+
+        data = {'hmod': mode}
+
+        if max_temperature:
+            temperature, unit = int(max_temperature[:-1]), max_temperature[-1]
+            converters = {
+                'C': SensorsData.celsius_to_kelvin,
+                'F': SensorsData.fahrenheit_to_kelvin,
+                'K': lambda x: x,
+            }
+            func = converters.get(unit, lambda x: -1)
+            kelvins = func(temperature)
+            if 274 <= kelvins <= 310:
+                data['hmax'] = '{:04d}'.format(int(kelvins) * 10)
+
+        if self._is_connected:
+            self._change_state(data)
 
     def set_standby_monitoring(self, mode):
         """Changes standby monitoring: ON|OFF"""

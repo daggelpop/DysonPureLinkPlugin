@@ -93,6 +93,14 @@ class SensorsData(object):
     def kelvin_to_celsius(kelvin_value):
         return kelvin_value - 273.15
 
+    @staticmethod
+    def fahrenheit_to_kelvin(fahrenheit_value):
+        return (fahrenheit_value + 459.67) * 5 / 9
+
+    @staticmethod
+    def celsius_to_kelvin(celsius_value):
+        return celsius_value + 273.15
+
     @property
     def humidex(self):
         return self.temperature + 0.5555 * \
@@ -110,7 +118,11 @@ class StateData(object):
         data = message['product-state']
 
         self.fan_mode = self._get_field_value(data['fmod'])
+        self.fan_speed = self._get_field_value(data['fnsp'])
         self.fan_state = self._get_field_value(data['fnst'])
+        self.heating_mode = self._get_field_value(data['hmod'])
+        self.heating_max_temp = self._get_field_value(data['hmax'])
+        self.heating_state = self._get_field_value(data['hsta'])
         self.night_mode = self._get_field_value(data['nmod'])
         self.speed = self._get_field_value(data['fnsp'])
         self.oscillation = self._get_field_value(data['oson'])
