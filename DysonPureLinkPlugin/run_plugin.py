@@ -44,5 +44,6 @@ def main():
     # Disconnect device (IMPORTANT) and print result
     print('Disconnected: ', dyson_pure_link.disconnect_device())
 
+
 if __name__ == '__main__':
     main()
