@@ -68,14 +68,20 @@ class SensorsData(object):
 
     def __repr__(self):
         """Return a String representation"""
-        return 'Temperature: {:.1f}°{}, Humidity: {} %, Humidex: {:.1f}, Volatile Compounds: {}, Particles: {}'.format(
-            self.temperature,
-            self.temperature_unit,
-            self.humidity,
-            self.humidex,
-            self.volatile_compounds,
-            self.particles
-        )
+        if self.has_data:
+            return 'Temperature: {:.1f}°{}, Humidity: {} %, Humidex: {:.1f}, Volatile Compounds: {}, Particles: {}'.format(
+                self.temperature,
+                self.temperature_unit,
+                self.humidity,
+                self.humidex,
+                self.volatile_compounds,
+                self.particles
+            )
+        else:
+            return 'Volatile Compounds: {}, Particles: {}'.format(
+                self.volatile_compounds,
+                self.particles
+            )
 
     @property
     def has_data(self):
