@@ -205,6 +205,11 @@ class DysonPureLink(object):
     def set_standby_monitoring(self, mode):
         """Changes standby monitoring: ON|OFF"""
         if self._is_connected:
+            if mode == 'TOGGLE':
+                if self.has_valid_data:
+                    mode = 'OFF' if self.state_data.standby_monitoring == 'ON' else 'ON'
+                else:
+                    return
             self._change_state({'rhtm': mode})
 
     def get_data(self):
