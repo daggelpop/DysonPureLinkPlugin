@@ -55,6 +55,7 @@ class SensorsData(object):
         humidity = data['hact']
         temperature = data['tact']
         volatile_compounds = data['vact']
+        timer = data['sltm']
         self.temperature_unit = temperature_unit
 
         self.humidity = None if humidity == 'OFF' else int(humidity)
@@ -65,17 +66,19 @@ class SensorsData(object):
             self.temperature = conversion_function(float(temperature) / 10)
         self.volatile_compounds = 0 if volatile_compounds == 'INIT' else int(volatile_compounds)
         self.particles = int(data['pact'])
+        self.timer = 0 if timer == 'OFF' else int(timer)
 
     def __repr__(self):
         """Return a String representation"""
         if self.has_data:
-            return 'Temperature: {:.1f}°{}, Humidity: {} %, Humidex: {:.1f}, Volatile Compounds: {}, Particles: {}'.format(
+            return 'Temperature: {:.1f}°{}, Humidity: {} %, Humidex: {:.1f}, Volatile Compounds: {}, Particles: {}, Timer: {}'.format(
                 self.temperature,
                 self.temperature_unit,
                 self.humidity,
                 self.humidex,
                 self.volatile_compounds,
-                self.particles
+                self.particles,
+                self.timer,
             )
         else:
             return 'Volatile Compounds: {}, Particles: {}'.format(

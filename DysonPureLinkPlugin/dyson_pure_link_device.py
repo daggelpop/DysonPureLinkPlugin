@@ -217,6 +217,20 @@ class DysonPureLink(object):
                     return
             self._change_state({'rhtm': mode})
 
+    def set_timer(self, duration):
+        """
+        Duration: OFF | 0-539
+        """
+        data = None
+
+        if duration in ("OFF", 0):
+            data = {"sltm": "OFF"}
+        elif type(duration) == int and (0 < duration < 540):
+            data = {"sltm": '{:04d}'.format(duration)}
+
+        if data and self._is_connected:
+            self._change_state(data)
+
     def get_data(self):
         return (self.state_data, self.sensor_data) if self.has_valid_data else tuple()
 
